@@ -1,14 +1,15 @@
 import './ContactForm.scss';
-import { nanoid } from 'nanoid';
-import { useDispatch, useSelector } from 'react-redux';
-import { addContact } from 'redux/contactsSlice/contactsSlice';
 import Notiflix from 'notiflix';
+import {
+  useAddContactMutation,
+  useGetContactsQuery,
+} from 'redux/contacts/contactApi';
 
 Notiflix.Notify.init({ fontSize: '20px' });
 
 export const ContactForm = () => {
-  const dispatch = useDispatch();
-  const contacts = useSelector(state => state.contacts.contacts);
+  const [addContact] = useAddContactMutation();
+  const { data: contacts } = useGetContactsQuery();
 
   const handleForm = e => {
     e.preventDefault();
@@ -17,7 +18,6 @@ export const ContactForm = () => {
     const number = e.target.elements.number.value;
 
     const newContact = {
-      id: nanoid(),
       name,
       number,
     };
@@ -33,7 +33,7 @@ export const ContactForm = () => {
 
     if (!nameCheck) {
       Notiflix.Notify.success('You have a new contact!');
-      dispatch(addContact(newContact));
+      addContact(newContact);
     } else {
       Notiflix.Notify.failure(`${name} is already in contacts.`);
     }
