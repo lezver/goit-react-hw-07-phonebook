@@ -1,11 +1,7 @@
 import './ContactList.scss';
 import { ContactItem, Loader } from 'components';
 import { useSelector } from 'react-redux';
-import {
-  useGetContactsQuery,
-  useAddContactMutation,
-  useDeleteContactMutation,
-} from 'redux/contacts/contactApi';
+import { useGetContactsQuery } from 'redux/contacts/contactApi';
 
 export const ContactList = () => {
   const filter = useSelector(state => state.filter.filter);
@@ -19,6 +15,7 @@ export const ContactList = () => {
 
   return (
     <>
+      {isError ?? <p className="phonebook__info">Failed! Try later ...</p>}
       {isLoading ? (
         <Loader />
       ) : (
