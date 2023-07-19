@@ -1,3 +1,4 @@
+import { Loader } from 'components/Loader';
 import './ContactForm.scss';
 import Notiflix from 'notiflix';
 import {
@@ -8,7 +9,7 @@ import {
 Notiflix.Notify.init({ fontSize: '20px' });
 
 export const ContactForm = () => {
-  const [addContact] = useAddContactMutation();
+  const [addContact, resultAdd] = useAddContactMutation();
   const { data: contacts } = useGetContactsQuery();
 
   const handleForm = e => {
@@ -40,28 +41,39 @@ export const ContactForm = () => {
   };
 
   return (
-    <form className="phonebook__form" onSubmit={handleForm}>
-      <label>
-        Name:
-        <input
-          type="text"
-          name="name"
-          pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
-          title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
-          required
-        />
-      </label>
-      <label>
-        Number:
-        <input
-          type="tel"
-          name="number"
-          pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
-          title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
-          required
-        />
-      </label>
-      <button type="submit">Add contact</button>
-    </form>
+    <>
+      <form className="phonebook__form" onSubmit={handleForm}>
+        <label>
+          Name:
+          <input
+            type="text"
+            name="name"
+            pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
+            title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
+            required
+          />
+        </label>
+        <label>
+          Number:
+          <input
+            type="tel"
+            name="number"
+            pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
+            title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
+            required
+          />
+        </label>
+        {resultAdd.isLoading ? (
+          <Loader />
+        ) : (
+          <button type="submit">Add contact</button>
+        )}
+      </form>
+      {resultAdd.isError && (
+        <p className="phonebook__form--error">
+          Something is wrong, please try again.
+        </p>
+      )}
+    </>
   );
 };

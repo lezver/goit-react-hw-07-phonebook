@@ -15,7 +15,9 @@ export const ContactList = () => {
 
   return (
     <>
-      {isError ?? <p className="phonebook__info">Failed! Try later ...</p>}
+      {isError && (
+        <p className="phonebook__list--error">Failed! Try later ...</p>
+      )}
       {isLoading ? (
         <Loader />
       ) : (
@@ -25,7 +27,9 @@ export const ContactList = () => {
               <ContactItem key={contact.id} contact={contact} />
             ))
           ) : (
-            <p className="phonebook__info">Sorry, but you have no contacts</p>
+            <p className="phonebook__list--info">
+              Sorry, but you have no contacts
+            </p>
           )}
         </ul>
       )}
